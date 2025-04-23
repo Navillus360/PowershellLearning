@@ -1,7 +1,9 @@
+#region Global Variables
 $Global:defaultFile = "\TextFile.txt"
 $Global:defaultFolder = "\TestFolder"
 $Global:defaultDirectory = Get-Location
 $Global:defaultItem = $Global:defaultDirectory, $Global:defaultFile -join ""
+#endregion
 
 function Menu {
   Write-Host "$Global:defaultDirectory"
@@ -23,12 +25,19 @@ function ItemSetup() {
   )
   $itemName = Read-Host "What would you like to name this File/Folder? `n>"
   $itemLocation = Read-Host "Where would you like to create the File/Folder? `n<!> If you input nothing for the File/Folder name, a default name and location will be chosen for you<!> `n>"
-  switch ($answer) {
-    1 { CreateFile $itemName, $itemLocation }
-    2 { CreateFolder $itemName, $itemLocation }
+  if (!Test-Path -Path $itemLocation -and $itemLocation -ne " ") {
+    Write-Host "Error: Folder location does not exist! Please ensure the name/location of the file is correct."
+    Menu
+  }
+  else {
+    switch ($answer) {
+      1 { CreateFile $itemName, $itemLocation }
+      2 { CreateFolder $itemName, $itemLocation }
+    }
   }
 }
 
+#region CreateFunctions
 function CreateFile() {
   param (
     [string] $fileName,
@@ -83,5 +92,6 @@ function CreateFolder() {
   }
   Write-Host "<!>Folder Created<!>"
 }
+#endregion
 
 Menu
