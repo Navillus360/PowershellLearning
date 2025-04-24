@@ -1,20 +1,17 @@
-$userName = $Env:USERNAME
-$startLocation = Get-Location
-cd 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup'
-$PWD
-cd C:\Users\$userName\Desktop
-$PWD
-cd C:\Users\$userName\Pictures
-$PWD
-cd C:\Windows\fr-FR
-$PWD
-cd C:\Drivers\USB
-$PWD
-cd $startLocation
-echo "Now I am back home!"
-# for (($i = 0); $i -le 5; $i++ ) {
-
-# }
+$Global:userName = $Env:USERNAME
+$Global:startLocation = Get-Location
+$Global:locations = @(
+ 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup'
+ 'C:\Users\$userName\Desktop'
+ 'C:\Users\$userName\Pictures'
+ 'C:\Windows\fr-FR'
+ 'C:\Drivers\USB'
+ 'C:\Windows\Boot\Resources\'
+ 'C:\Program Files (x86)\InstallShield Installation Information'
+ 'C:\Users'
+ 'C:\Windows\System32\Boot'
+ Get-Location
+)
 
 function Menu {
  $running = $true
@@ -31,11 +28,37 @@ function Menu {
 }
 
 function Easy {
- 
+ for ($i = 0; $i -le 5; $i++) {
+  $randomIndex = Get-Random -InputObject $Global:locations
+  Set-Location $randomIndex
+  $fileName = "File", $i -join ""
+  New-Item -Path $fileName -ItemType File
+  if ($i -eq 5) {
+   Set-Content -Path $randomIndex -Value "You found the final file! Well done!"
+  }
+  else {
+   Set-Content -Path $randomIndex -Value "You found File $i. Can you find the others?"
+  }
+  Set-Location $Global:startLocation
+ }
 }
 function Hard {
- 
+ for ($i = 0; $i -le 7; $i++) {
+  $randomIndex = Get-Random -InputObject $Global:locations
+  Set-Location $randomIndex
+  $fileName = "File", $i -join ""
+  New-Item -Path $fileName -ItemType File
+  if ($i -eq 7) {
+   Set-Content -Path $randomIndex -Value "You found the final file! Well done!"
+  }
+  else {
+   Set-Content -Path $randomIndex -Value "You found File $i. Can you find the others?"
+  }
+  Set-Location $Global:startLocation
+ }
 }
 function Instructions {
- Write-Host "Depending on the difficulty selected 5-7 text files will be created and placed into random locations on your drive. `n`n==Easy difficulty== `n5 files will be generated and the terminal will produce vague hints in where they could be. `n`n==Hard difficulty==`n7 text files will be generated but no hints will be given :)"
+ Write-Host "Depending on the difficulty selected 5 or 7 text files will be created and placed into random locations on your drive. `n`n==Easy difficulty== `n5 files will be generated and the terminal will produce vague hints in where they could be. `n`n==Hard difficulty==`n7 text files will be generated but no hints will be given :)`n"
 }
+
+Menu
