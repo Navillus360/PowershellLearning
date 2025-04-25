@@ -39,8 +39,9 @@ function Easy {
   else {
    Set-Content -Path $randomIndex -Value "You found File $i. Can you find the others?"
   }
-  Set-Location $Global:startLocation
+  GenerateHint $randomIndex
  }
+ Set-Location $Global:startLocation
 }
 function Hard {
  for ($i = 0; $i -le 7; $i++) {
@@ -57,8 +58,27 @@ function Hard {
   Set-Location $Global:startLocation
  }
 }
+
 function Instructions {
  Write-Host "Depending on the difficulty selected 5 or 7 text files will be created and placed into random locations on your drive. `n`n==Easy difficulty== `n5 files will be generated and the terminal will produce vague hints in where they could be. `n`n==Hard difficulty==`n7 text files will be generated but no hints will be given :)`n"
+}
+
+function GenerateHint {
+ param (
+  [string] $fileLocation
+ )
+ switch ($fileLocation) {
+  'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup' { Write-Host "I activate when awakend or restarted" }
+  'C:\Users\$userName\Desktop' { Write-Host "I am empty when you first start, but almost full of 'Homework' folders' and games." }
+  'C:\Users\$userName\Pictures' { Write-Host "Snipping tools default location." }
+  'C:\Windows\fr-FR' { Write-Host "My colour flag is blue, white, and red" }
+  'C:\Drivers\USB' { Write-Host "My friend drives a sub." }
+  'C:\Windows\Boot\Resources\' { Write-Host "I hold all the languages." }
+  'C:\Program Files (x86)\InstallShield Installation Information' { Write-Host "I am needed by software programs, but I will always return when you get rid of me." }
+  'C:\Users' { Write-Host "I see your name. But, I can see the public as well." }
+  'C:\Windows\System32\Boot' { Write-Host "My name begins with a b, and my parent folder is something you don't want to delete >:)" }
+  Get-Location { Write-Host "Well...It had to be here somehow?" }
+ }
 }
 
 Menu
