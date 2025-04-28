@@ -21,8 +21,8 @@ function Menu {
  while ($running) {
   $choice = Read-Host "1: Desktop `n2: Downloads `n3: Custom location`n4: Exit `n>"
   switch ($choice) {
-   1 { Cleanup 1 }
-   2 { Cleanup 2 }
+   1 { Cleanup 1; exit }
+   2 { Cleanup 2; exit }
    3 { LocationSelect }
    4 { exit }
    Default { Write-Host "Error: Invalid input" }
@@ -45,7 +45,8 @@ function Cleanup {
     elseif ($file.Extension -in $docTypes) {
      Move-Item -Path $desktop, $file -join "" -Destination $documents, $file -join ""
     }
-   } 
+   }
+   Write-Host "Desktop organised" 
   }
 
   #Cleans up the downloads
@@ -66,12 +67,32 @@ function Cleanup {
      Move-Item -Path $downloads, $file -join"" -Destination $downloadedDocuments, $file -join""
     }
    } 
+
+   Write-Host "Download folder organised" 
   }
  }
 }
 
 function LocationSelect {
  $userLocaion = Read-Host "If you wish to return to the menu, enter 1. Otherwise, enter the full location you wish to cleanup `n>"
+ if ($userLocaion -eq 1) {
+  Menu
+ }
+ if (!(Test-Path -Path $userLocaion)) {
+  Write-Host "Error: The location does not exist! Please choose another."
+ }
+ else {
+  foreach ($file in $userLocaion) {
+   if ($file.Extension -in $imgTypes) {
+    Move-Item -Path $userLocaion, $file -join"" -Destination $userLocaion, $file -join""
+   }
+   elseif ($file.Extension -in $downloads) {
+    Move-Item -Path $downloads, $file -join"" -Destination $downloadedDocuments, $file -join""
+   }
+  } 
+ }
+
+ Write-Host "$userLocation organised"
 }
 
 Menu
