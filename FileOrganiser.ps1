@@ -1,6 +1,5 @@
 #region Variables
 $imgTypes = ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"
-
 $docTypes = ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt"
 #endregion
 
@@ -75,11 +74,11 @@ function AutoCleanup {
 
 function LocationSelect {
  Add-Type -AssemblyName System.Windows.Forms
- $FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
- $null = $FolderBrowser.ShowDialog()
- $ChosenPath = $FolderBrowser.SelectedPath
- if ($null -ne $FolderBrowser.SelectedPath) {
-  CustomCleanup $ChosenPath
+ $folderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
+ $null = $folderBrowser.ShowDialog()
+ $chosenPath = $folderBrowser.SelectedPath
+ if ($null -ne $folderBrowser.SelectedPath) {
+  CustomCleanup $chosenPath
  }
 }
 
